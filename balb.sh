@@ -47,14 +47,51 @@ fi
 echo "Creating list of files to process..."
 rm $1.list
 for a in ${ext[*]}; do
-	ls $1/*.$a >> $1.list
+	ls $1/*.$a >> $1.list 2>/dev/null
 done
 
 echo "Creating thumbnails..."
 convert -strip -thumbnail ${size}x${size} -raise 3x3 -gravity center -extent ${size}x${size} -append @$1.list $1.jpg
 
 echo "Creating HTML..."
-cat <<EOT >$1.inc.html
+rm $1.inc.html 2>/dev/null
+# list all files
+files=()
+files_length=0
+while read line; do
+	files[$files_length]="$line"
+	let files_length++
+done <$1.list
+# copy all comment lines
+# also note which files have a comment
+cat $1.html | awk '/<script>\s*comments/, /<\/script>/{ print }' | while read line; do
+	# loop through all $files, if current line matches it -- delete it from $files
+	for f in $(seq 0 $files_length); do
+		if [[ "$line" =~ "'${files[$f]}': '"* ]]; then
+			unset files[$f]
+			break
+		fi
+	done
+	# before last line, print remaining $files
+	if [[ "$line" = *"/script"* ]]; then
+		for f in ${files[*]}; do
+			echo "'$f': ''," >>$1.inc.html
+		done
+	fi
+	echo $line >>$1.inc.html
+done
+
+# if above loop didn't happen - add a new comments section
+if [ ! -f $1.inc.html ]; then
+	echo 'Adding new comments section!'
+	echo "<script>comments={ //you can edit comments below, but please don't change this line" >>$1.inc.html
+	for f in ${files[*]}; do
+		echo "'$f': ''," >>$1.inc.html
+	done
+	echo "}</script> <!-- please don't change this line or anything below -->" >>$1.inc.html
+fi
+
+cat <<EOT >>$1.inc.html
 <style>.thumbnails a{background: url('$1.jpg'); width:${size}px; height:${size}px}</style>
 <div class="viewer" style="display: none"><img></div>
 <div class="text"></div>
@@ -66,11 +103,6 @@ while read line; do
      let offset+=size
 done <$1.list
 echo "</div> <!-- thumbnails -->" >> $1.inc.html
-echo "<script>names=[" >> $1.inc.html
-while read line; do
-     echo -n "\"$line\"," >> $1.inc.html
-done <$1.list
-echo "]</script>" >> $1.inc.html
 echo "<script src=\"album.js\"></script>" >> $1.inc.html
 
 echo "Patching file..."

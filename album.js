@@ -64,18 +64,6 @@ fixLinks(document.querySelector('.thumbnails'));
 
 
 
-function fixComments() {
-	if(!window.comments)
-		comments={};
-	for(var i in names) {
-		if(!comments[names[i]])
-			comments[names[i]]="";
-	}
-}
-fixComments();
-
-
-
 // how hard can it be to create an event listener?
 // https://developer.mozilla.org/en-US/docs/Web/Reference/Events/wheel
 // creates a global "addWheelListener" method
