@@ -93,7 +93,7 @@ fi
 
 cat <<EOT >>$1.inc.html
 <style>.thumbnails a{background: url('$1.jpg'); width:${size}px; height:${size}px}</style>
-<div class="viewer" style="display: none"><img></div>
+<div class="viewer" style="display: none"><span></span><img></div>
 <div class="text"></div>
 <div class="thumbnails">
 EOT

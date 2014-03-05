@@ -2,8 +2,9 @@ function addCssToDocument() {
 	var style = document.createElement("style");
 	style.type="text/css";
 	style.innerHTML=[
-		'.viewer img { display: block; margin: auto; max-width:100%; max-height:100%; }',
-		'.text, .thumbnails { text-align: center; }',
+		'.viewer, .text, .thumbnails { text-align: center; }',
+		'.viewer span{ display: inline-block; vertical-align: middle; height: 100%; }',
+		'.viewer img { display: inline-block; vertical-align: middle; max-width:100%; max-height:100%; }',
 		'.thumbnails a{ display:inline-block; }',
 		'.thumbnails.small { overflow-x: scroll; white-space: nowrap; }',
 	].join('');
