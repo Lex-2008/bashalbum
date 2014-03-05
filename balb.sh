@@ -114,6 +114,7 @@ cp $1.html $1.html.bak
 		close("'$1.inc.html'")
 		while (getline > 0 && !/<!-- album end -->/) {}
         } 1' $1.html.bak >$1.html
+touch -r $1/ $1.html
 
 rm $1.list $1.html.bak $1.inc.html
 echo "Done!"
