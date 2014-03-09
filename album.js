@@ -46,7 +46,7 @@ function openLayer() {
 	|| this.offsetLeft > thumbnails.offsetLeft+thumbnails.scrollLeft+thumbnails.offsetWidth-this.offsetWidth)
 		thumbnails.scrollLeft=this.offsetLeft+this.offsetWidth/2-thumbnails.offsetWidth/2-thumbnails.offsetLeft
 	// prepare the text
-	if(typeof (comment=comments[this.getAttribute('href')]) == 'object') {
+	if(typeof (comment=comments[this.href.slice(this.href.lastIndexOf('/')+1)]) == 'object') {
 		if(comment[navigator.language])
 			text.innerHTML=comment[navigator.language];
 		else if(comment[navigator.language.slice(0,2)])

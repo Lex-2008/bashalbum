@@ -20,6 +20,8 @@ langs=(en ru)
 bb=~/bashblog/bb.sh
 
 
+IFS=$'\n'
+
 if [ "$1" == "edit" ]; then
 	[ ! -d $2 ] && exit 2 # must be a directory
 	[ ! -f $2.html ] && exit 3 # relevant file must exist
@@ -84,32 +86,11 @@ rm $1.inc.html 2>/dev/null
 files=()
 files_length=0
 while read line; do
-	files[$files_length]="$line"
+	files[$files_length]="${line##*/}" # save only filenames
 	let files_length++
 done <$1.list
-# copy all comment lines
-# also note which files have a comment
-cat $1.html | awk '/<script>\s*comments/, /<\/script>/{ print }' | while read line; do
-	# loop through all $files, if current line matches it -- delete it from $files
-	for f in $(seq 0 $files_length); do
-		if [[ "$line" =~ "'${files[$f]}': "* ]]; then
-			unset files[$f]
-			break
-		fi
-	done
-	# before last line, print remaining $files
-	if [[ "$line" = *"/script"* ]]; then
-		for f in ${files[*]}; do
-			echo "'$f': ''," >>$1.inc.html
-		done
-	fi
-	echo $line >>$1.inc.html
-done
 
-# if above loop didn't happen - add a new comments section
-if [ ! -f $1.inc.html ]; then
-	echo 'Adding new comments section!'
-	echo "<script>comments={ //you can edit comments below, but please don't change this line" >>$1.inc.html
+addFilesLines() {
 	if [ "${langs}" = "" ]; then
 		# no langs
 		for f in ${files[*]}; do
@@ -128,6 +109,30 @@ if [ ! -f $1.inc.html ]; then
 			done
 		done
 	fi
+}
+
+# copy all comment lines
+# also note which files have a comment
+cat $1.html | awk '/<script>\s*comments/, /<\/script>/{ print }' | while read line; do
+	# loop through all $files, if current line matches it -- delete it from $files
+	for f in $(seq 0 $files_length); do
+		if [[ "$line" =~ "'${files[$f]}': "* ]]; then
+			unset files[$f]
+			break
+		fi
+	done
+	# before last line, print remaining $files
+	if [[ "$line" = *"/script"* ]]; then
+		addFilesLines $1
+	fi
+	echo "$line" >>$1.inc.html
+done
+
+# if above loop didn't happen - add a new comments section
+if [ ! -f $1.inc.html ]; then
+	echo 'Adding new comments section!'
+	echo "<script>comments={ //you can edit comments below, but please don't change this line" >>$1.inc.html
+	addFilesLines $1
 	echo "}</script> <!-- please don't change this line or anything below -->" >>$1.inc.html
 fi
 
