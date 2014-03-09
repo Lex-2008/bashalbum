@@ -48,13 +48,19 @@ Usage
   It will generate an `2014-summer-trip.html` file with a gallery of all images
   located in `2014-summer-trip` folder, and `2014-summer-trip.jpg` for all their
   previews (used in `2014-summer-trip.html` page)
-- (optional) edit the generated `2014-summer-trip.html` file to add your text
-  before `&lt;!-- album begins -->` or after `&lt;!-- album ends -->`
-- (optional) edit the generated `2014-summer-trip.html` file to add your
-  description to every photo
+
+Editing
+-------
+
+If you're using bashblog, then add `edit` argument for `balb.sh`, like this:
+
+    ./balb.sh edit 2014-summer-trip
+
+It will call `bb.sh`, which will use your $EDITOR to edit the file. With future
+versions of bashblog, you'll be able to rename file and folder this way.
+
+Things you can edit:
+- add your text before `&lt;!-- album begins -->` or after `&lt;!-- album ends -->`
+- add your description to every photo
   (look for comments section soon after `&lt;!-- album begins -->` line,
   it's prefilled with an empty string for each photo, nice!)
-- When/if you add/remove/edit photos in relevant directory, re-run the same
-  command to regenerate thumbnails and to refresh `2014-summer-trip.html` file.
-  Your text and comments should be preserved.
-

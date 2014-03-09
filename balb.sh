@@ -19,6 +19,28 @@ langs=(en ru)
 # path to bashblog, if any
 bb=~/bashblog/bb.sh
 
+
+if [ "$1" == "edit" ]; then
+	[ ! -d $2 ] && exit 2 # must be a directory
+	[ ! -f $2.html ] && exit 3 # relevant file must exist
+	EDITOR="eval $EDITOR >$(tty)"
+	$bb edit -n $2.html | {
+		while read line; do
+			echo "$line"
+			if [[ "$line" = "Posted"* ]]; then
+				newname="$(expr "$line" : "Posted \(.*\).html")"
+			fi
+		done
+		if [[ "$newname" && "$newname" != "$2" ]]; then
+			echo "moving [$2] to [$newname]"
+			mv $2 $newname
+			rm $2.$ext
+			$0 $newname
+		fi
+	}
+	exit 0
+fi
+
 [ $# -lt 1 ] && exit 1 # must have an argument
 [ ! -d $1 ] && exit 2 # must be a directory
 
@@ -54,7 +76,7 @@ for a in ${ext[*]}; do
 done
 
 echo "Creating thumbnails..."
-convert -strip -thumbnail ${size}x${size} -raise 3x3 -gravity center -extent ${size}x${size} -append @$1.list $1.jpg
+convert -strip -thumbnail ${size}x${size} -raise 3x3 -gravity center -extent ${size}x${size} -append @$1.list $1.$ext
 
 echo "Creating HTML..."
 rm $1.inc.html 2>/dev/null
