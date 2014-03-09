@@ -77,7 +77,7 @@ function openLayer() {
 // https://developer.mozilla.org/en-US/docs/Web/Reference/Events/wheel
 // creates a global "addWheelListener" method
 // example: addWheelListener( elem, function( e ) { console.log( e.deltaY ); e.preventDefault(); } );
-function createWheelListener(window,document) {
+(function createWheelListener(window,document) {
     var prefix = "", _addEventListener, support;
     // detect event model
     if ( window.addEventListener ) {
@@ -127,8 +127,7 @@ function createWheelListener(window,document) {
             return callback( event );
         }, useCapture || false );
     }
-}
-createWheelListener(window,document);
+})(window,document);
 
 
 function scroll(evt) {
