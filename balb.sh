@@ -48,7 +48,7 @@ echo "Creating empty file..."
 fi
 
 echo "Creating list of files to process..."
-rm $1.list
+rm $1.list 2>/dev/null
 for a in ${ext[*]}; do
 	ls $1/*.$a >> $1.list 2>/dev/null
 done
