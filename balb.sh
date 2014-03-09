@@ -13,6 +13,9 @@ size=100
 #type of files
 ext=(jpg jpeg JPG JPEG)
 
+# comments languages
+langs=(en ru)
+
 # path to bashblog, if any
 bb=~/bashblog/bb.sh
 
@@ -67,7 +70,7 @@ done <$1.list
 cat $1.html | awk '/<script>\s*comments/, /<\/script>/{ print }' | while read line; do
 	# loop through all $files, if current line matches it -- delete it from $files
 	for f in $(seq 0 $files_length); do
-		if [[ "$line" =~ "'${files[$f]}': '"* ]]; then
+		if [[ "$line" =~ "'${files[$f]}': "* ]]; then
 			unset files[$f]
 			break
 		fi
@@ -85,9 +88,24 @@ done
 if [ ! -f $1.inc.html ]; then
 	echo 'Adding new comments section!'
 	echo "<script>comments={ //you can edit comments below, but please don't change this line" >>$1.inc.html
-	for f in ${files[*]}; do
-		echo "'$f': ''," >>$1.inc.html
-	done
+	if [ "${langs}" = "" ]; then
+		# no langs
+		for f in ${files[*]}; do
+			echo "'$f': ''," >>$1.inc.html
+		done
+	else
+		for f in ${files[*]}; do
+			ff="'$f': {" # formatted filename
+			ffs="$(printf "%${#ff}s" ' ')"
+			for l in ${langs[*]}; do
+				# set $end to brace for the last line, to comma for all others
+				[ $l == ${langs[${#langs[*]}-1]} ] && end='},' || end=','
+				echo "$ff'$l':''$end" >>$1.inc.html
+				# all lines, starting with second, should have spaces instead of full name
+				ff="$ffs"
+			done
+		done
+	fi
 	echo "}</script> <!-- please don't change this line or anything below -->" >>$1.inc.html
 fi
 

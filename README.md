@@ -9,18 +9,29 @@ Features
 
 - generates image sprite and appropriate HTML/CSS markup for files in a folder
 - contains a simple javascript gallery viewer
-- each image can have a description 
+- each image can have descriptions in several languages
 - integrates to bashblog used in same directory
 
-Installation & configuration
-----------------------------
+Installation
+------------
 
 - install ImageMagic or GraphicsMagick
 - make a directory for your albums, say, `~/www/photos/`
 - copy `album.js` to that folder
-- if you're using bashblog, change balb.sh to point to bashblog.sh
-- if you're *not* using bashblog, then you're at your own -- this script doesn't
-  have any index.html generator
+
+Configuration
+-------------
+
+Edit balb.sh:
+- change `bb` to point to bashblog.sh, or leave empty if you're not using bashblog
+- change `langs` to the list of languages you're going to use, or leave empty
+  if you're going to write comments in one language only.
+  Note that the first language is the fallback language, i.e. when no other
+  language matches user's preferred language, first one is selected.
+  Also note that this option is taken into account only when generating html file
+  for the first time. On further updates, comments section is preserved intact.
+  To change this behavior, delete comments section and run `balb` again -- it
+  will recreate the comments section
 
 Usage
 -----
