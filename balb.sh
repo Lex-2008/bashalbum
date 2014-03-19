@@ -25,7 +25,7 @@ IFS=$'\n'
 if [ "$1" == "edit" ]; then
 	[ ! -d $2 ] && exit 2 # must be a directory
 	[ ! -f $2.html ] && exit 3 # relevant file must exist
-	EDITOR="eval $EDITOR >$(tty)"
+	EDITOR="eval $EDITOR >\"$(tty)\""
 	$bb edit -n $2.html | {
 		while read line; do
 			echo "$line"
