@@ -85,7 +85,7 @@ rm $1.inc.html 2>/dev/null
 # list all files
 files=()
 files_length=0
-while read line; do
+while read -r line; do
 	files[$files_length]="${line##*/}" # save only filenames
 	let files_length++
 done <$1.list
@@ -113,7 +113,7 @@ addFilesLines() {
 
 # copy all comment lines
 # also note which files have a comment
-cat $1.html | awk '/<script>\s*comments/, /<\/script>/{ print }' | while read line; do
+cat $1.html | awk '/<script>\s*comments/, /<\/script>/{ print }' | while read -r line; do
 	# loop through all $files, if current line matches it -- delete it from $files
 	for f in $(seq 0 $files_length); do
 		if [[ "$line" =~ "'${files[$f]}': "* ]]; then
@@ -143,7 +143,7 @@ cat <<EOT >>$1.inc.html
 <div class="thumbnails">
 EOT
 offset=0
-while read line; do
+while read -r line; do
      echo "<a href=\"$line\" style=\"background-position: 0 -${offset}px\"></a>" >> $1.inc.html
      let offset+=size
 done <$1.list
