@@ -6,6 +6,7 @@
 		'.viewer span{ display: inline-block; vertical-align: middle; height: 100%; }',
 		'.viewer img { display: inline-block; vertical-align: middle; max-width:100%; max-height:100%; }',
 		'.thumbnails a{ display:inline-block; }',
+		'.thumbnails .selected { outline-offset: -1px; }',
 		'.thumbnails.small { overflow-x: scroll; white-space: nowrap; }',
 	].join('');
 	document.getElementsByTagName("head")[0].appendChild(style);
@@ -42,6 +43,7 @@ function openLayer() {
 	if(document.querySelector('.selected'))
 		document.querySelector('.selected').className = '';
 	this.className = 'selected';
+	this.focus();
 	if(this.offsetLeft < thumbnails.offsetLeft+thumbnails.scrollLeft
 	|| this.offsetLeft > thumbnails.offsetLeft+thumbnails.scrollLeft+thumbnails.offsetWidth-this.offsetWidth)
 		thumbnails.scrollLeft=this.offsetLeft+this.offsetWidth/2-thumbnails.offsetWidth/2-thumbnails.offsetLeft
@@ -71,7 +73,54 @@ function openLayer() {
 	}
 })(document.querySelectorAll('.thumbnails a'));
 
+function openNext(){
+	var cur=document.querySelector('.selected');
+	if(cur && cur.nextElementSibling)
+		openLayer.call(cur.nextElementSibling);
+	else
+		openLayer.call(document.querySelector('.thumbnails a:first-child'));
+}
 
+function openPrev(){
+	var cur=document.querySelector('.selected');
+	if(cur && cur.previousElementSibling)
+		openLayer.call(cur.previousElementSibling);
+	else
+		openLayer.call(document.querySelector('.thumbnails a:last-child'));
+}
+
+document.querySelector('.viewer img').onclick=openNext;
+window.onkeydown=function(event){
+	switch(event.keyCode) {
+		case 9: //Tab
+		case 13://Enter
+		case 32://Space
+		case 34://Page down
+		case 39://Right arrow
+		case 40://Down arrow
+		case 50://2
+		case 87://w
+		case 90://z
+		case 106://KP multiply
+		case 107://KP plus
+		case 171://plus
+			openNext();
+			return false;
+		case 8: //Backspace
+		case 27://Esc
+		case 33://Page up
+		case 37://Left arrow
+		case 38://Up arrow
+		case 49://1
+		case 65://a
+		case 81://q
+		case 109://KP minus
+		case 111://KP divide
+		case 173://minus
+			openPrev();
+			return false;
+	}
+};
 
 // how hard can it be to create an event listener?
 // https://developer.mozilla.org/en-US/docs/Web/Reference/Events/wheel
