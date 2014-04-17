@@ -98,8 +98,6 @@ window.onkeydown=function(event){
 		case 34://Page down
 		case 39://Right arrow
 		case 40://Down arrow
-		case 50://2
-		case 87://w
 		case 90://z
 		case 106://KP multiply
 		case 107://KP plus
@@ -111,9 +109,7 @@ window.onkeydown=function(event){
 		case 33://Page up
 		case 37://Left arrow
 		case 38://Up arrow
-		case 49://1
 		case 65://a
-		case 81://q
 		case 109://KP minus
 		case 111://KP divide
 		case 173://minus
