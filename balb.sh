@@ -56,7 +56,7 @@ if [ ! -f $1.html ]; then
 			<!-- album end -->
 		EOT
 		EDITOR="cp $1.tmp.html"
-		echo 'p' | $bb post
+		echo 'p' | $bb post -html
 		rm $1.tmp.html
 	else
 		cat <<-EOT >$1.html
