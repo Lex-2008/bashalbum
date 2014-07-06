@@ -57,7 +57,7 @@ echo "Creating empty file..."
 			<!-- album end -->
 		EOT
 		EDITOR="cp $1.tmp.html"
-		echo -e 'n\np\n' | $bb post
+		echo 'p' | $bb post
 		rm $1.tmp.html
 	else
 		cat <<-EOT >$1.html
