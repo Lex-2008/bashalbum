@@ -19,6 +19,8 @@ langs=(en ru)
 # path to bashblog, if any
 bb=~/bashblog/bb.sh
 
+# sed expr to make a nice title from filename
+default_title_sed='s/^[0-9]*[-_]//;s/\.[^.]*$//;s/[-_]\+/ /g'
 
 IFS=$'\n'
 
@@ -95,16 +97,18 @@ addFilesLines() {
 	if [ "${langs}" = "" ]; then
 		# no langs
 		for f in ${files[*]}; do
-			echo "'$f': ''," >>$1.inc.html
+			ffn="$(echo "$f" | sed "$default_title_sed")"
+			echo "'$f': '$ffn'," >>$1.inc.html
 		done
 	else
 		for f in ${files[*]}; do
 			ff="'$f': {" # formatted filename
+			ffn="$(echo "${f%%.*}" | sed "$default_title_sed")"
 			ffs="$(printf "%${#ff}s" ' ')"
 			for l in ${langs[*]}; do
 				# set $end to brace for the last line, to comma for all others
 				[ $l == ${langs[${#langs[*]}-1]} ] && end='},' || end=','
-				echo "$ff'$l':''$end" >>$1.inc.html
+				echo "$ff'$l':'$ffn'$end" >>$1.inc.html
 				# all lines, starting with second, should have spaces instead of full name
 				ff="$ffs"
 			done
