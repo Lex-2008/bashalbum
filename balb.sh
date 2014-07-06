@@ -47,7 +47,7 @@ fi
 [ ! -d $1 ] && exit 2 # must be a directory
 
 if [ ! -f $1.html ]; then
-echo "Creating empty file..."
+	echo "Creating empty file..."
 	if [ -f "$bb" ]; then
 		cat <<-EOT >$1.tmp.html
 			$1
@@ -69,6 +69,7 @@ echo "Creating empty file..."
 			</body></html>
 		EOT
 	fi
+	touch -r $1/ $1.html
 fi
 
 echo "Creating list of files to process..."
