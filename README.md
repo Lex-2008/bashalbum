@@ -10,7 +10,7 @@ Features
 - generates image sprite and appropriate HTML/CSS markup for files in a folder
 - contains a simple javascript gallery viewer
 - each image can have descriptions in several languages
-- integrates to bashblog used in same directory
+- integrates to [bashblog](https://github.com/cfenollosa/bashblog) used in same directory
 
 Installation
 ------------
@@ -23,24 +23,24 @@ Configuration
 -------------
 
 Edit balb.sh:
-- change `bb` to point to bashblog.sh, or leave empty if you're not using bashblog
+- change `bb` to point to `bashblog.sh`, or leave empty if you're not using bashblog
 - change `langs` to the list of languages you're going to use, or leave empty
   if you're going to write comments in one language only.
-  Note that the first language is the fallback language, i.e. when no other
+  Note that the first language is the _fallback_ language, i.e. when no other
   language matches user's preferred language, first one is selected.
   Also note that this option is taken into account only when generating html file
   for the first time. On further updates, comments section is preserved intact.
-  To change this behavior, delete comments section and run `balb` again -- it
+  To change this behavior, delete comments section and run `balb` again - it
   will recreate the comments section
 
 Usage
 -----
 
-- make a subdirectory for an album, say, `www/photos/2014-summer-trip`
+- make a subdirectory for an album, say, `~/www/photos/2014-summer-trip`
 - (optional) set timestamp of the directory to the date of the trip (will be
   copied to generated file)
 - copy photos into the folder
-- cd to parent directory and run balb.sh, passing a folder name *without
+- cd to parent directory and run `balb.sh`, passing a folder name *without
   trailing slash* as a first parameter, for example:
 
     cd ~/www/photos/ && ./balb.sh 2014-summer-trip
