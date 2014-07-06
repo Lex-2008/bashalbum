@@ -25,7 +25,6 @@ IFS=$'\n'
 if [ "$1" == "edit" ]; then
 	[ ! -d $2 ] && exit 2 # must be a directory
 	[ ! -f $2.html ] && exit 3 # relevant file must exist
-	touch -r $2/ $2.html
 	EDITOR="eval $EDITOR >\"$(tty)\""
 	$bb edit -n $2.html | {
 		while read line; do
@@ -152,6 +151,7 @@ echo "</div> <!-- thumbnails -->" >> $1.inc.html
 echo "<script src=\"album.js\"></script>" >> $1.inc.html
 
 echo "Patching file..."
+touch -r $1.html $1/
 cp $1.html $1.html.bak
     awk '/<!-- album begin -->/{
 		print
